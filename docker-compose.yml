@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  upholstery:
+    build: .
+    image: upholstery:latest
+    command: yarn run start
+    ports:
+      - "3000:3000"
