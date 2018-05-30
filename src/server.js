@@ -3,6 +3,7 @@ const rp = require('request-promise-native');
 const cors = require('kcors');
 const onerror = require('koa-onerror');
 const jwt = require('cihm-jwt');
+const favicon = require('koa-favicon');
 
 const app = new Koa();
 
@@ -21,6 +22,8 @@ const couch = rp.defaults({
 onerror(app);
 
 app.use(cors({ origin: '*' }));
+
+app.use(favicon('./public/favicon.ico'));
 
 app.use(jwt(config.secrets));
 
