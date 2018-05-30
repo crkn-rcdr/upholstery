@@ -30,7 +30,7 @@ app.use(async ctx => {
         ctx.body = response.body;
         ctx.status = response.statusCode;
     } catch(e) {
-        ctx.body = e;
+        ctx.body = e.error;
         ctx.status = e.statusCode || 500;
     }
 });
