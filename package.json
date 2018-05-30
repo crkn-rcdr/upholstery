@@ -1,0 +1,24 @@
+{
+  "name": "upholstery",
+  "version": "1.0.0",
+  "description": "Authorization and abstraction layer for c7a CouchDB databases",
+  "main": "src/server.js",
+  "repository": "https://github.com/c7a/upholstery",
+  "author": "Sascha Adler",
+  "license": "MIT",
+  "scripts": {
+    "start": "node .",
+    "dev": "$(yarn bin)/nodemon -w src -e js -x 'yarn run start'"
+  },
+  "dependencies": {
+    "cihm-jwt": "https://github.com/c7a/cihm-jwt.git",
+    "kcors": "^2.2.1",
+    "koa": "^2.5.1",
+    "koa-onerror": "^4.0.0",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}
