@@ -16,4 +16,5 @@ COPY src src
 RUN chown -R node:node .
 
 USER node
+CMD yarn run start
 EXPOSE 3000
