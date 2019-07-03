@@ -1,20 +1,22 @@
-FROM node:8-alpine
+FROM node:10.15
+ARG node_env=production
 
-ENV HOME=/home/node
-WORKDIR $HOME/upholstery
-
-RUN apk add --update git
-
-COPY config.json package.json yarn.lock ./
+WORKDIR /upholstery
 RUN chown -R node:node .
 
 USER node
-RUN yarn install
 
-USER root
-COPY src src
-RUN chown -R node:node .
+ENV NODE_ENV=$node_env
 
-USER node
-CMD yarn run start
-EXPOSE 3000
+COPY --chown=node:node package.json yarn.lock ./
+
+RUN if [ $NODE_ENV = "development" ]; \
+  then yarn install --dev; \
+  else yarn install; \
+  fi
+
+COPY --chown=node:node *.js ./
+COPY --chown=node:node ssl ./ssl/
+
+EXPOSE 8443
+EXPOSE 8080

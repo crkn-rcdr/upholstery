@@ -4,22 +4,9 @@ Authorization and abstraction layer sitting on top of CouchDB. Get it?
 
 ## Configuration
 
-The service currently expects a `config.json` file in the root directory, with the following contents:
+The service requires the following environment variables to be set:
 
-    {
-        "couch": http://example.couch.db:5984/,
-        "secrets": {"user": "argleBargle"},
-        "timeout": 10000
-    }
+- `COUCH`: URL where the CouchDB installation can be found
+- `JWT_KEY`: Secret key matching `amsa`'s `APPLICATION_JWT_SECRET`
 
-### `couch`
-
-Base URL for CouchDB installation, port and all.
-
-### `secrets`
-
-Key-value pairs of issuer and secret. `cihm-jwt` expects the `iss` claim to match the issuer in this object.
-
-### `timeout`
-
-Time before the request to CouchDB times out, in milliseconds. Default is 5000.
+The `node_env` build argument is also settable. If set to `development` nodemon will be made available for code reloading.
