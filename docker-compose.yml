@@ -1,14 +1,10 @@
 version: "3"
 
 services:
-  apache:
-    build: apache/.
-    image: upholstery-apache:latest
-    ports:
-      - "80:80"
   upholstery:
     build: .
     image: upholstery:latest
-  cookie-authorizer:
-    image: docker.c7a.ca/cihm-cookie-authorizer:production
+    ports:
+      - "443:8443"
+      - "80:8080"
     command: yarn run start
