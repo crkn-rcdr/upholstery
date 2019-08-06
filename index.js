@@ -20,8 +20,8 @@ https
       if (jwtValid) {
         if (url.parse(req.url).pathname === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
-          res.writeHead(200, { "Content-Type": "text/plain" });
-          res.end("Authentication cookie set.");
+          res.writeHead(302, { Location: "/_utils" });
+          res.end();
         } else {
           proxy.web(req, res, { target: env.require("COUCH") });
         }
