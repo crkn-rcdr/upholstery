@@ -16,7 +16,5 @@ RUN if [ $NODE_ENV = "development" ]; \
   fi
 
 COPY --chown=node:node *.js ./
-COPY --chown=node:node ssl ./ssl/
 
-EXPOSE 8443
 EXPOSE 8080
