@@ -5,9 +5,16 @@ const env = require("require-env");
 
 const validateJwt = require("./jwt");
 
-const proxy = httpProxy.createProxyServer({});
+const couchProxy = httpProxy.createProxyServer({});
 
-proxy.on("proxyRes", (_proxyRes, _req, res) => {
+couchProxy.on("proxyReq", (proxyReq, req) => {
+  let path = url.parse(req.url).pathname;
+  let replacement = path.replace(/^\/couch\//, "/");
+  console.log(replacement);
+  proxyReq.path = replacement;
+});
+
+couchProxy.on("proxyRes", (_proxyRes, _req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
@@ -23,13 +30,20 @@ http
       res.end();
     } else {
       let [jwtValid, message] = validateJwt(req);
+      let path = url.parse(req.url).pathname;
       if (jwtValid) {
-        if (url.parse(req.url).pathname === "/cookie") {
+        if (path === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
-          res.writeHead(302, { Location: "/_utils" });
+          res.writeHead(302, { Location: "/couch/_utils/" });
           res.end();
+        } else if (path === "/couch") {
+          res.writeHead(302, { Location: "/couch/" });
+          res.end();
+        } else if (path.startsWith("/couch/")) {
+          couchProxy.web(req, res, { target: env.require("COUCH") });
         } else {
-          proxy.web(req, res, { target: env.require("COUCH") });
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Path not supported");
         }
       } else {
         res.writeHead(401, { "Content-Type": "text/plain" });
