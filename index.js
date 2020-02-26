@@ -3,15 +3,14 @@ const http = require("http");
 const httpProxy = require("http-proxy");
 const env = require("require-env");
 
+const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
   let path = url.parse(req.url).pathname;
-  let replacement = path.replace(/^\/couch\//, "/");
-  console.log(replacement);
-  proxyReq.path = replacement;
+  proxyReq.path = path.replace(/^\/couch\//, "/");
 });
 
 couchProxy.on("proxyRes", (_proxyRes, _req, res) => {
@@ -41,6 +40,28 @@ http
           res.end();
         } else if (path.startsWith("/couch/")) {
           couchProxy.web(req, res, { target: env.require("COUCH") });
+        } else if (path === "/api" || path === "/api/") {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ methods: Object.keys(api) }));
+        } else if (path.startsWith("/api/")) {
+          let splitPath = path.split("/");
+          let method = splitPath[2];
+          if (typeof api[method] === "function") {
+            let output;
+            try {
+              output = JSON.stringify(
+                api[method].apply(null, splitPath.slice(3))
+              );
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(output);
+            } catch (e) {
+              res.writeHead(500, { "Content-Type": "text/plain" });
+              res.end(e.message);
+            }
+          } else {
+            res.writeHead(400, { "Content-Type": "text/plain" });
+            res.end(`Method ${method} not supported`);
+          }
         } else {
           res.writeHead(404, { "Content-Type": "text/plain" });
           res.end("Path not supported");
