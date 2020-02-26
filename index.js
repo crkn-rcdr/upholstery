@@ -9,8 +9,7 @@ const validateJwt = require("./jwt");
 const couchProxy = httpProxy.createProxyServer({});
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
-  let path = url.parse(req.url).pathname;
-  proxyReq.path = path.replace(/^\/couch\//, "/");
+  proxyReq.path = req.url.replace(/^\/couch/, "");
 });
 
 couchProxy.on("proxyRes", (_proxyRes, _req, res) => {
