@@ -29,6 +29,7 @@ http
     } else {
       let [jwtValid, message] = validateJwt(req);
       let path = url.parse(req.url).pathname;
+      res.setHeader("Access-Control-Allow-Origin", "*");
       if (jwtValid) {
         if (path === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
