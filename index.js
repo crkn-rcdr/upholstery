@@ -39,7 +39,12 @@ http
       if (jwtValid) {
         if (path === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
-          res.writeHead(302, { Location: env.require("COOKIEREDIRECT") });
+          let redirect=env.require("COOKIEREDIRECT");
+          let q = url.parse(req.url,true).query;
+          if ('redirect' in q) {
+            redirect = q.redirect;
+          }
+          res.writeHead(302, { Location: redirect });
           res.end();
         } else if (path === "/couch") {
           res.writeHead(302, { Location: "/couch/" });
