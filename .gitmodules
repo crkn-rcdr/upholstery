@@ -1,0 +1,3 @@
+[submodule "d10n"]
+	path = d10n
+	url = git@github.com:crkn-rcdr/d10n.git
