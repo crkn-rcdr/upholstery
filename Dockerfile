@@ -17,4 +17,11 @@ RUN if [ $NODE_ENV = "development" ]; \
 
 COPY --chown=node:node *.js ./
 
+# Copy files from the https://github.com/crkn-rcdr/d10n subproject
+COPY d10n/workflow/www/demo demo
+
+# Sets default server, which can be overridden at run time
+ENV COUCH http://iris.tor.c7a.ca:5984
+
 EXPOSE 8080
+CMD yarn run start

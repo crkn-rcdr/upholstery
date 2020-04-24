@@ -2,11 +2,13 @@ const url = require("url");
 const http = require("http");
 const httpProxy = require("http-proxy");
 const env = require("require-env");
+const static = require('node-static');
 
 const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
+const fileServer = new static.Server('./demo');
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
   proxyReq.path = req.url.replace(/^\/couch/, "");
@@ -40,6 +42,11 @@ http
           res.end();
         } else if (path.startsWith("/couch/")) {
           couchProxy.web(req, res, { target: env.require("COUCH") });
+        } else if (path === "/demo") {
+          res.writeHead(302, { Location: "/demo/" });
+          res.end();
+        } else if (path.startsWith("/demo/")) {
+          fileServer.serve(req, res);
         } else if (path === "/api" || path === "/api/") {
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ methods: Object.keys(api) }));
