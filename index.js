@@ -8,7 +8,7 @@ const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
-const fileServer = new static.Server('./demo');
+const fileServer = new static.Server('./');
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
   proxyReq.path = req.url.replace(/^\/couch/, "");
@@ -42,8 +42,8 @@ http
           res.end();
         } else if (path.startsWith("/couch/")) {
           couchProxy.web(req, res, { target: env.require("COUCH") });
-        } else if (path === "/demo") {
-          res.writeHead(302, { Location: "/demo/" });
+        } else if (path === "/demo" || path === "/demo/") { // Send staff to the current documentation for the /demo/ tools if they don't specify a tool.
+          res.writeHead(302, { Location: "https://crkn.sharepoint.com/:w:/s/platform/EWcumgzbmT5EjWBDyMTR0BgBwpZM7P4afWO_h0c7JJbNMA?e=Chsjr6" });
           res.end();
         } else if (path.startsWith("/demo/")) {
           fileServer.serve(req, res);
