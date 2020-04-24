@@ -8,6 +8,10 @@ const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
+
+
+// This would normally allow everything from the current directory to be available,
+// but because we only use the fileServer for /demo/ it will only send from ./demo/
 const fileServer = new static.Server('./');
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
@@ -35,7 +39,7 @@ http
       if (jwtValid) {
         if (path === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
-          res.writeHead(302, { Location: "/couch/_utils/" });
+          res.writeHead(302, { Location: env.require("COOKIEREDIRECT") });
           res.end();
         } else if (path === "/couch") {
           res.writeHead(302, { Location: "/couch/" });
@@ -43,7 +47,7 @@ http
         } else if (path.startsWith("/couch/")) {
           couchProxy.web(req, res, { target: env.require("COUCH") });
         } else if (path === "/demo" || path === "/demo/") { // Send staff to the current documentation for the /demo/ tools if they don't specify a tool.
-          res.writeHead(302, { Location: "https://crkn.sharepoint.com/:w:/s/platform/EWcumgzbmT5EjWBDyMTR0BgBwpZM7P4afWO_h0c7JJbNMA?e=Chsjr6" });
+          res.writeHead(302, { Location: env.require("DEMOREDIRECT") });
           res.end();
         } else if (path.startsWith("/demo/")) {
           fileServer.serve(req, res);
