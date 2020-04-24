@@ -2,17 +2,16 @@ const url = require("url");
 const http = require("http");
 const httpProxy = require("http-proxy");
 const env = require("require-env");
-const static = require('node-static');
+const static = require("node-static");
 
 const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
 
-
 // This would normally allow everything from the current directory to be available,
 // but because we only use the fileServer for /demo/ it will only send from ./demo/
-const fileServer = new static.Server('./');
+const fileServer = new static.Server("./");
 
 couchProxy.on("proxyReq", (proxyReq, req) => {
   proxyReq.path = req.url.replace(/^\/couch/, "");
@@ -22,6 +21,10 @@ couchProxy.on("proxyRes", (_proxyRes, _req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
+couchProxy.on("error", (e) => {
+  console.log(e);
+});
+
 http
   .createServer((req, res) => {
     if (req.method === "OPTIONS") {
@@ -29,7 +32,7 @@ http
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*"
+        "Access-Control-Allow-Headers": "*",
       });
       res.end();
     } else {
@@ -39,9 +42,9 @@ http
       if (jwtValid) {
         if (path === "/cookie") {
           res.setHeader("Set-Cookie", [`auth_token=${message}`]);
-          let redirect=env.require("COOKIEREDIRECT");
-          let q = url.parse(req.url,true).query;
-          if ('redirect' in q) {
+          let redirect = env.require("COOKIEREDIRECT");
+          let q = url.parse(req.url, true).query;
+          if ("redirect" in q) {
             redirect = q.redirect;
           }
           res.writeHead(302, { Location: redirect });
@@ -51,7 +54,8 @@ http
           res.end();
         } else if (path.startsWith("/couch/")) {
           couchProxy.web(req, res, { target: env.require("COUCH") });
-        } else if (path === "/demo" || path === "/demo/") { // Send staff to the current documentation for the /demo/ tools if they don't specify a tool.
+        } else if (path === "/demo" || path === "/demo/") {
+          // Send staff to the current documentation for the /demo/ tools if they don't specify a tool.
           res.writeHead(302, { Location: env.require("DEMOREDIRECT") });
           res.end();
         } else if (path.startsWith("/demo/")) {
