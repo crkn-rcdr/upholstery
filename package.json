@@ -16,8 +16,7 @@
     "cookie": "^0.4.0",
     "http-proxy": "^1.17.0",
     "njwt": "^1.0.0",
-    "require-env": "^0.2.1",
-    "node-static": "^0.7.11"
+    "require-env": "^0.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

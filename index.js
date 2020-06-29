@@ -2,7 +2,6 @@ const url = require("url");
 const http = require("http");
 const httpProxy = require("http-proxy");
 const env = require("require-env");
-const static = require("node-static");
 
 const api = require("./api");
 const validateJwt = require("./jwt");
