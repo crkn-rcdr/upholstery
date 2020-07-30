@@ -1,4 +1,4 @@
-FROM node:10.15-alpine
+FROM node:14.4-alpine
 
 WORKDIR /upholstery
 RUN chown -R node:node .

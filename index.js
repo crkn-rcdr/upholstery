@@ -3,7 +3,6 @@ const http = require("http");
 const httpProxy = require("http-proxy");
 const env = require("require-env");
 
-const api = require("./api");
 const validateJwt = require("./jwt");
 
 const couchProxy = httpProxy.createProxyServer({});
