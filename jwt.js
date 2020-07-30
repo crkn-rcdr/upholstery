@@ -13,9 +13,9 @@ Alternatively, the JWT can be provided in the query string
 
 or be set in a cookie, with key auth_token`;
 
-const key = env.require("JWT_KEY");
+const key = env.require("JWT_SECRET");
 
-module.exports = req => {
+module.exports = (req) => {
   let token =
     url.parse(req.url, true).query.token ||
     cookie.parse(req.headers.cookie || "")["auth_token"] ||

@@ -7,7 +7,12 @@ services:
     networks:
       access-platform:
         ipv4_address: 172.30.0.6
-    command: yarn run start
+    command: yarn run dev
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./index.js:/upholstery/index.js
+      - ./jwt.js:/upholstery/jwt.js
 networks:
   access-platform:
     external: true

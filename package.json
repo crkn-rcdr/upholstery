@@ -10,14 +10,15 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
-    "dev": "yarn exec nodemon -w src -e js -x 'yarn run start'"
+    "dev": "yarn exec nodemon -w src -e js -x 'yarn run start'",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml -f docker-compose.override.yml up --build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml -f docker-compose.override.yml build"
   },
   "dependencies": {
     "cookie": "^0.4.0",
     "http-proxy": "^1.17.0",
     "njwt": "^1.0.0",
-    "require-env": "^0.2.1",
-    "node-static": "^0.7.11"
+    "require-env": "^0.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

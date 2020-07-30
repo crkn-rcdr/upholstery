@@ -6,7 +6,11 @@ Authorization and abstraction layer sitting on top of CouchDB. Get it?
 
 The service requires the following environment variables to be set:
 
+- `NODE_ENV`: `development` or `production`. Set by default in the relevant docker-compose files
 - `COUCH`: URL where the CouchDB installation can be found
-- `JWT_KEY`: Secret key matching `amsa`'s `APPLICATION_JWT_SECRET`
+- `JWT_SECRET`: Secret key matching [amsa](https://github.com/crkn-rcdr/amsa)'s `JWT_SECRET`
 
-The `node_env` build argument is also settable. If set to `development` nodemon will be made available for code reloading.
+## Docker
+
+- `yarn run docker:dev` sets up a development environment.
+- `yarn run docker:prod` builds a production image.
