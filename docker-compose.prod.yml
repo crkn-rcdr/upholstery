@@ -6,7 +6,7 @@ services:
       context: .
       args:
         node_env: production
-    image: upholstery:latest
+    image: upholstery:prod
     command: yarn run start
     networks:
       access-platform:
