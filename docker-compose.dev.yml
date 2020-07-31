@@ -2,14 +2,15 @@ version: "3"
 
 services:
   upholstery:
-    build: .
+    build:
+      context: .
+      args:
+        node_env: development
     image: upholstery:latest
+    command: yarn run dev
     networks:
       access-platform:
         ipv4_address: 172.30.0.6
-    command: yarn run dev
-    environment:
-      NODE_ENV: development
     volumes:
       - ./index.js:/upholstery/index.js
       - ./jwt.js:/upholstery/jwt.js
