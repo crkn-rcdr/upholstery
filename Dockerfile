@@ -1,4 +1,4 @@
-FROM node:14.4-alpine
+FROM node:15.0.1-alpine3.10
 ARG node_env
 ENV NODE_ENV ${node_env}
 
